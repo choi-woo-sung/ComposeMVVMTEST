@@ -71,7 +71,10 @@ fun Style.toUiModel() = StyleUi(
 )
 
 fun Footer.toUiModel() = FooterUi(
-    
+    type = type,
+    title = title,
+    iconURL = iconURL,
+
 )
 
 fun Banner.toUiModel() = BannerUi(
@@ -92,8 +95,7 @@ fun List<Goods>.toUiModel() {
 
             ContentType.GRID -> GoodsUI.Grid(
                 header = goods.header.toUiModel(),
-
-
+                goodUi = goods.contents.goods,
             )
 
             ContentType.SCROLL -> TODO()
