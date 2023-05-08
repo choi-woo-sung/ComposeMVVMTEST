@@ -1,0 +1,436 @@
+{
+  "data": [
+    {
+      "contents": {
+        "type": "BANNER",
+        "banners": [
+          {
+            "linkURL": "https://www.musinsa.com/app/campaign/index/junebeautyfull",
+            "thumbnailURL": "https://image.msscdn.net/images/event_banner/2022061009432800000059650.jpg",
+            "title": "",
+            "description": "",
+            "keyword": ""
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/plan/views/22278",
+            "thumbnailURL": "https://image.msscdn.net/images/event_banner/2022062311154900000044053.jpg",
+            "title": "하이드아웃 S/S 시즌오프",
+            "description": "최대 30% 할인",
+            "keyword": "세일"
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/plan/views/22189",
+            "thumbnailURL": "https://image.msscdn.net/images/event_banner/2022062311154700000070083.jpg",
+            "title": "오끌레르 22 서머 컬렉션 발매",
+            "description": "최대 20% 할인",
+            "keyword": "발매"
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/plan/views/21902",
+            "thumbnailURL": "https://image.msscdn.net/images/event_banner/2022062211345700000040311.jpg",
+            "title": "COOL한 여름을 위한 냉감 아이템",
+            "description": "최대 54% 할인",
+            "keyword": "무신사 추천"
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/campaign/index/mensformal_summer",
+            "thumbnailURL": "https://image.msscdn.net/images/event_banner/2022061510152900000035673.jpg",
+            "title": "",
+            "description": "",
+            "keyword": ""
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/plan/views/22272",
+            "thumbnailURL": "https://image.msscdn.net/images/event_banner/2022062211292700000012174.jpg",
+            "title": "아모프레 22 핫 서머 인기상품",
+            "description": "단독 최대 10% 할인",
+            "keyword": "단독 세일"
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/campaign/index/golf_summer_festival",
+            "thumbnailURL": "https://image.msscdn.net/images/event_banner/2022061009431800000062033.jpg",
+            "title": "",
+            "description": "",
+            "keyword": ""
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/plan/views/22032",
+            "thumbnailURL": "https://image.msscdn.net/images/event_banner/2022062211271700000088225.jpg",
+            "title": "클로브 22 S/S 컬렉션",
+            "description": "5% 할인 + 10% 쿠폰",
+            "keyword": "세일"
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/plan/views/22274",
+            "thumbnailURL": "https://image.msscdn.net/images/event_banner/2022062211340400000015373.jpg",
+            "title": "에센셜 세트 아이템",
+            "description": "스컬프터, 노이아고 외 최대 60% 할인",
+            "keyword": "무신사 추천"
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/plan/views/22118",
+            "thumbnailURL": "https://image.msscdn.net/images/event_banner/2022062211292400000067119.jpg",
+            "title": "일꼬르소 22 바캉스 컬렉션",
+            "description": "한정 발매 및 단독 최대 27% 할인",
+            "keyword": "단독 세일"
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/goods/2618624/0",
+            "thumbnailURL": "https://image.msscdn.net/images/event_banner/2022062311174100000002315.jpg",
+            "title": "예스아이씨 쿨맥스 티셔츠 한정 발매 ",
+            "description": "블랙 & 화이트 2팩 구성 ",
+            "keyword": "한정 발매"
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/plan/views/21507",
+            "thumbnailURL": "https://image.msscdn.net/images/event_banner/2022061310200700000034341.jpg",
+            "title": "3만 원으로 일주일 살기",
+            "description": "스파 데이 최대 84% 할인",
+            "keyword": "단독 세일"
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/content/s/event/muahin",
+            "thumbnailURL": "https://image.msscdn.net/images/event_banner/2022061009272400000003644.jpg",
+            "title": "",
+            "description": "",
+            "keyword": ""
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/campaign/index/outlet_clearance",
+            "thumbnailURL": "https://image.msscdn.net/images/event_banner/2022062210491700000041663.jpg",
+            "title": "",
+            "description": "",
+            "keyword": ""
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/plan/views/21923",
+            "thumbnailURL": "https://image.msscdn.net/images/event_banner/2022062211340100000039165.jpg",
+            "title": "네파 22 S/S 인기상품 할인",
+            "description": "자유시간 협업 상품 외 단독 최대 60% 할인",
+            "keyword": "단독 세일"
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/plan/views/21650",
+            "thumbnailURL": "https://image.msscdn.net/images/event_banner/2022062314140400000016694.jpg",
+            "title": "슬로우 레코드 하우스 22 S/S",
+            "description": "인플루언서 PICK 최대 20% 할인",
+            "keyword": "세일"
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/campaign/index/2022_summer_shoes",
+            "thumbnailURL": "https://image.msscdn.net/images/event_banner/2022061413563900000034077.jpg",
+            "title": "",
+            "description": "",
+            "keyword": ""
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/campaign/index/boutiqueTVC",
+            "thumbnailURL": "https://image.msscdn.net/images/event_banner/2022061009433100000021642.jpg",
+            "title": "",
+            "description": "",
+            "keyword": ""
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/campaign/index/2022_package_setup",
+            "thumbnailURL": "https://image.msscdn.net/images/event_banner/2022062115154600000010868.jpg",
+            "title": "",
+            "description": "",
+            "keyword": ""
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/plan/views/22293",
+            "thumbnailURL": "https://image.msscdn.net/images/event_banner/2022062215240900000026699.jpg",
+            "title": "NEW IN FASHION FOR WOMEN",
+            "description": "노이아고, 리올그, 엔오르 외 최대 40% 할인",
+            "keyword": "무신사 추천"
+          }
+        ]
+      }
+    },
+    {
+      "header": {
+        "title": "클리어런스"
+      },
+      "contents": {
+        "type": "GRID",
+        "goods": [
+          {
+            "linkURL": "https://www.musinsa.com/app/goods/2281818",
+            "thumbnailURL": "https://image.msscdn.net/images/goods_img/20211224/2281818/2281818_1_320.jpg",
+            "brandName": "아스트랄 프로젝션",
+            "price": 39900,
+            "saleRate": 50,
+            "hasCoupon": true
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/goods/2281817",
+            "thumbnailURL": "https://image.msscdn.net/images/goods_img/20211224/2281817/2281817_1_320.jpg",
+            "brandName": "아스트랄 프로젝션",
+            "price": 39900,
+            "saleRate": 45,
+            "hasCoupon": false
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/goods/2281819",
+            "thumbnailURL": "https://image.msscdn.net/images/goods_img/20211224/2281819/2281819_1_320.jpg",
+            "brandName": "아스트랄 프로젝션",
+            "price": 39900,
+            "saleRate": 65,
+            "hasCoupon": true
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/goods/2281822",
+            "thumbnailURL": "https://image.msscdn.net/images/goods_img/20211224/2281822/2281822_1_320.jpg",
+            "brandName": "아스트랄 프로젝션",
+            "price": 39900,
+            "saleRate": 75,
+            "hasCoupon": false
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/goods/2281823",
+            "thumbnailURL": "https://image.msscdn.net/images/goods_img/20211224/2281823/2281823_1_320.jpg",
+            "brandName": "아스트랄 프로젝션",
+            "price": 39900,
+            "saleRate": 35,
+            "hasCoupon": true
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/goods/2281826",
+            "thumbnailURL": "https://image.msscdn.net/images/goods_img/20211224/2281826/2281826_1_320.jpg",
+            "brandName": "아스트랄 프로젝션",
+            "price": 39900,
+            "saleRate": 73,
+            "hasCoupon": false
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/goods/2280726",
+            "thumbnailURL": "https://image.msscdn.net/images/goods_img/20211223/2280726/2280726_1_320.jpg",
+            "brandName": "텐블레이드",
+            "price": 14900,
+            "saleRate": 71,
+            "hasCoupon": true
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/goods/2239335",
+            "thumbnailURL": "https://image.msscdn.net/images/goods_img/20211118/2239335/2239335_2_320.jpg",
+            "brandName": "텐블레이드",
+            "price": 14900,
+            "saleRate": 81,
+            "hasCoupon": false
+          }
+        ]
+      },
+      "footer": {
+        "type": "MORE",
+        "title": "더보기"
+      }
+    },
+    {
+      "header": {
+        "title": "디스커버리 익스페디션 인기 스니커즈: 최대 50% 할인",
+        "iconURL": "https://image.msscdn.net/icons/mobile/clock.png",
+        "linkURL": "https://www.musinsa.com/brands/discoveryexpedition?category3DepthCodes=&category2DepthCodes=&category1DepthCode=018&colorCodes=&startPrice=&endPrice=&exclusiveYn=&includeSoldOut=&saleGoods=&timeSale=&includeKeywords=&sortCode=discount_rate&tags=&page=1&size=90&listViewType=small&campaignCode=&groupSale=&outletGoods=false&boutiqueGoods="
+      },
+      "contents": {
+        "type": "SCROLL",
+        "goods": [
+          {
+            "linkURL": "https://www.musinsa.com/app/goods/1727824",
+            "thumbnailURL": "https://image.msscdn.net/images/goods_img/20201221/1727824/1727824_4_320.jpg",
+            "brandName": "디스커버리 익스페디션",
+            "price": 59500,
+            "saleRate": 50,
+            "hasCoupon": true
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/goods/2309841",
+            "thumbnailURL": "https://image.msscdn.net/images/goods_img/20220117/2309841/2309841_2_320.jpg",
+            "brandName": "디스커버리 익스페디션",
+            "price": 68000,
+            "saleRate": 20,
+            "hasCoupon": false
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/goods/2175693",
+            "thumbnailURL": "https://image.msscdn.net/images/goods_img/20211013/2175693/2175693_2_320.jpg",
+            "brandName": "디스커버리 익스페디션",
+            "price": 132300,
+            "saleRate": 30,
+            "hasCoupon": true
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/goods/1795481",
+            "thumbnailURL": "https://image.msscdn.net/images/goods_img/20210216/1795481/1795481_2_320.jpg",
+            "brandName": "디스커버리 익스페디션",
+            "price": 87200,
+            "saleRate": 20,
+            "hasCoupon": false
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/goods/1363093",
+            "thumbnailURL": "https://image.msscdn.net/images/goods_img/20200323/1363093/1363093_2_320.jpg",
+            "brandName": "디스커버리 익스페디션",
+            "price": 111200,
+            "saleRate": 20,
+            "hasCoupon": true
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/goods/1775655",
+            "thumbnailURL": "https://image.msscdn.net/images/goods_img/20210203/1775655/1775655_2_320.jpg",
+            "brandName": "디스커버리 익스페디션",
+            "price": 132300,
+            "saleRate": 30,
+            "hasCoupon": false
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/goods/1938003",
+            "thumbnailURL": "https://image.msscdn.net/images/goods_img/20210506/1938003/1938003_1_320.jpg",
+            "brandName": "디스커버리 익스페디션",
+            "price": 68000,
+            "saleRate": 20,
+            "hasCoupon": true
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/goods/1866270",
+            "thumbnailURL": "https://image.msscdn.net/images/goods_img/20210326/1866270/1866270_1_320.jpg",
+            "brandName": "디스커버리 익스페디션",
+            "price": 95200,
+            "saleRate": 20,
+            "hasCoupon": true
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/goods/1938002",
+            "thumbnailURL": "https://image.msscdn.net/images/goods_img/20210506/1938002/1938002_1_320.jpg",
+            "brandName": "디스커버리 익스페디션",
+            "price": 68000,
+            "saleRate": 20,
+            "hasCoupon": false
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/goods/1847062",
+            "thumbnailURL": "https://image.msscdn.net/images/goods_img/20210316/1847062/1847062_1_320.jpg",
+            "brandName": "디스커버리 익스페디션",
+            "price": 77400,
+            "saleRate": 40,
+            "hasCoupon": true
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/goods/1795479",
+            "thumbnailURL": "https://image.msscdn.net/images/goods_img/20210216/1795479/1795479_2_320.jpg",
+            "brandName": "디스커버리 익스페디션",
+            "price": 111200,
+            "saleRate": 20,
+            "hasCoupon": false
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/goods/2269901",
+            "thumbnailURL": "https://image.msscdn.net/images/goods_img/20211215/2269901/2269901_2_320.jpg",
+            "brandName": "디스커버리 익스페디션",
+            "price": 95200,
+            "saleRate": 20,
+            "hasCoupon": true
+          }
+        ]
+      },
+      "footer": {
+        "type": "REFRESH",
+        "title": "새로운 추천",
+        "iconURL": "https://image.msscdn.net/icons/mobile/clock.png"
+      }
+    },
+    {
+      "header": {
+        "title": "무신사 추천 코디"
+      },
+      "contents": {
+        "type": "STYLE",
+        "styles": [
+          {
+            "linkURL": "https://www.musinsa.com/app/styles/views/27417",
+            "thumbnailURL": "https://image.musinsa.com/images/style/list/2022062214302100000008217.jpg"
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/styles/views/27416",
+            "thumbnailURL": "https://image.musinsa.com/images/style/list/2022062214285200000072520.jpg"
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/styles/views/27415",
+            "thumbnailURL": "https://image.musinsa.com/images/style/list/2022062214272200000056964.jpg"
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/styles/views/27414",
+            "thumbnailURL": "https://image.musinsa.com/images/style/list/2022062214255500000030807.jpg"
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/styles/views/27413",
+            "thumbnailURL": "https://image.musinsa.com/images/style/list/2022062214232800000082313.jpg"
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/styles/views/27412",
+            "thumbnailURL": "https://image.musinsa.com/images/style/list/2022062214214600000026102.jpg"
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/styles/views/27411",
+            "thumbnailURL": "https://image.musinsa.com/images/style/list/2022062214184600000046790.jpg"
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/styles/views/27410",
+            "thumbnailURL": "https://image.musinsa.com/images/style/list/2022062214165600000031022.jpg"
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/styles/views/27409",
+            "thumbnailURL": "https://image.musinsa.com/images/style/list/2022062214143800000054754.jpg"
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/styles/views/27408",
+            "thumbnailURL": "https://image.musinsa.com/images/style/list/2022062214124200000032093.jpg"
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/codimap/views/17245",
+            "thumbnailURL": "https://image.musinsa.com/images/codimap/list/2022062313485400000043032.jpg"
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/codimap/views/17244",
+            "thumbnailURL": "https://image.musinsa.com/images/codimap/list/2022062313480100000030596.jpg"
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/codimap/views/17243",
+            "thumbnailURL": "https://image.musinsa.com/images/codimap/list/2022062313464900000074853.jpg"
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/codimap/views/17242",
+            "thumbnailURL": "https://image.musinsa.com/images/codimap/list/2022062313454400000075325.jpg"
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/codimap/views/17239",
+            "thumbnailURL": "https://image.musinsa.com/images/codimap/list/2022062312234100000082540.jpg"
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/codimap/views/17238",
+            "thumbnailURL": "https://image.musinsa.com/images/codimap/list/2022062312221300000016053.jpg"
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/codimap/views/17214",
+            "thumbnailURL": "https://image.musinsa.com/images/codimap/list/2022062309475500000037425.jpg"
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/codimap/views/17237",
+            "thumbnailURL": "https://image.musinsa.com/images/codimap/list/2022062312203900000001222.jpg"
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/codimap/views/17236",
+            "thumbnailURL": "https://image.musinsa.com/images/codimap/list/2022062312194000000072470.jpg"
+          },
+          {
+            "linkURL": "https://www.musinsa.com/app/codimap/views/17235",
+            "thumbnailURL": "https://image.musinsa.com/images/codimap/list/2022062312184300000050220.jpg"
+          }
+        ]
+      },
+      "footer": {
+        "type": "MORE",
+        "title": "더보기"
+      }
+    }
+  ]
+}
