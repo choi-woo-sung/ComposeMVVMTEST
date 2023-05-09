@@ -71,13 +71,19 @@ import kotlinx.coroutines.delay
 @Composable
 fun MainScreen(modifier: Modifier = Modifier, viewModel: MainViewModel = hiltViewModel()) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
-    MainScreen(uiState)
+    MainScreen(
+        uiState,
+        onLoadMoreClicked = viewModel::loadMore,
+        onRecommendClicked = viewModel::recommendNewItem,
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun MainScreen(
     uiState: MainUiState,
+    onLoadMoreClicked: (Int) -> Unit = {},
+    onRecommendClicked: (Int) -> Unit = {},
 ) {
     val horizontalListScroll = rememberLazyListState()
     LazyColumn() {
@@ -94,36 +100,42 @@ internal fun MainScreen(
             }
 
             is MainUiState.Success -> {
-                uiState.data.forEach {
-                    when (it) {
+                uiState.data.forEachIndexed { idx, goodUi ->
+                    when (goodUi) {
                         is GoodsUI.Banner -> {
                             BannerScreen(
-                                content = it.bannerUi,
+                                content = goodUi.bannerUi,
                             )
                         }
 
                         is GoodsUI.Grid -> {
                             GoodsGridScreen(
-                                header = it.header,
-                                content = it.goodUi,
-                                footer = it.footerUi,
+                                header = goodUi.header,
+                                content = goodUi.goodUi,
+                                footer = goodUi.footerUi,
+                                onClick = { onLoadMoreClicked(idx) },
+                                isMore = goodUi.isMore,
+
                             )
                         }
 
                         is GoodsUI.Scroll -> {
                             ScrollScreen(
-                                header = it.header,
-                                content = it.goodUi,
-                                footer = it.footerUi,
+                                header = goodUi.header,
+                                content = goodUi.goodUi,
+                                footer = goodUi.footerUi,
                                 horizontalListScroll,
+                                onClick = { onRecommendClicked(idx) },
                             )
                         }
 
                         is GoodsUI.Style -> {
                             StyleScreen(
-                                header = it.header,
-                                content = it.styleUi,
-                                footer = it.footerUi,
+                                header = goodUi.header,
+                                content = goodUi.styleUi,
+                                footer = goodUi.footerUi,
+                                onClick = { onLoadMoreClicked(idx) },
+                                isMore = goodUi.isMore,
                             )
                         }
                     }
@@ -148,6 +160,7 @@ fun LazyListScope.ScrollScreen(
     content: List<GoodUi>,
     footer: FooterUi,
     horizontalListScroll: LazyListState,
+    onClick: () -> Unit,
 ) {
     stickyHeader {
         GoodsHeader(
@@ -172,6 +185,7 @@ fun LazyListScope.ScrollScreen(
     }
     item {
         FooterButton(
+            onClick = onClick,
             text = footer.title,
             iconUrl = footer.iconURL,
         )
@@ -183,6 +197,8 @@ fun LazyListScope.StyleScreen(
     header: HeaderUi,
     content: List<StyleUi>,
     footer: FooterUi,
+    onClick: () -> Unit,
+    isMore: Boolean = true,
 ) {
     stickyHeader {
         GoodsHeader(
@@ -201,16 +217,25 @@ fun LazyListScope.StyleScreen(
             contentDescription = "",
         )
     }
-    item {
-        FooterButton(
-            text = footer.title,
-            iconUrl = footer.iconURL,
-        )
+    if (isMore) {
+        item {
+            FooterButton(
+                onClick = onClick,
+                text = footer.title,
+                iconUrl = footer.iconURL,
+            )
+        }
     }
 }
 
 @OptIn(ExperimentalFoundationApi::class)
-fun LazyListScope.GoodsGridScreen(header: HeaderUi, content: List<GoodUi>, footer: FooterUi) {
+fun LazyListScope.GoodsGridScreen(
+    header: HeaderUi,
+    content: List<GoodUi>,
+    footer: FooterUi,
+    onClick: () -> Unit,
+    isMore: Boolean = true,
+) {
     stickyHeader {
         GoodsHeader(
             title = header.title,
@@ -228,11 +253,14 @@ fun LazyListScope.GoodsGridScreen(header: HeaderUi, content: List<GoodUi>, foote
             hasCoupon = it.hasCoupon,
         )
     }
-    item {
-        FooterButton(
-            text = footer.title,
-            iconUrl = footer.iconURL,
-        )
+    if (isMore) {
+        item {
+            FooterButton(
+                onClick = onClick,
+                text = footer.title,
+                iconUrl = footer.iconURL,
+            )
+        }
     }
 }
 

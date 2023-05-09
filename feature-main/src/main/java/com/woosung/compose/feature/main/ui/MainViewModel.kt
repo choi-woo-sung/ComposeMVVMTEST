@@ -18,8 +18,11 @@ package com.woosung.compose.feature.main.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ddd.pollpoll.core.result.Result
+import com.ddd.pollpoll.core.result.asResult
 import com.woosung.compose.feature.main.ui.MainUiState.Loading
 import com.woosung.compose.feature.main.ui.model.GoodsUI
+import com.woosung.compose.feature.main.ui.model.toUiModel
 import com.woosung.domain.repository.MainRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -36,6 +39,10 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
     private val events = Channel<MainEvent>()
 
+    init {
+        fetchGoods()
+    }
+
     val uiState = events.receiveAsFlow().runningFold(MainUiState.Loading, ::reduceState)
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), Loading)
 
@@ -45,61 +52,86 @@ class MainViewModel @Inject constructor(
                 Loading
             }
 
-            is MainEvent.Loaded -> {
-                MainUiState.Success(event.data)
-            }
+            is MainEvent.Loaded -> MainUiState.Success(event.data)
 
             is MainEvent.LoadMore -> {
                 when (current) {
-                    is MainUiState.Success -> {
-                        val goodsUI = current.data[event.index]
-                        when (goodsUI) {
-                            is GoodsUI.Grid -> {
-                                val newGoodsUIList = goodsUI.goodUi.toMutableList()
-                                    .apply { addAll(goodsUI.extraList[0]) }
-                                val newExtraList = goodsUI.extraList.drop(0)
-                                val newGoodUI = goodsUI.copy(
-                                    goodUi = newGoodsUIList,
-                                    extraList = newExtraList,
-                                )
-
-                                current.copy(
-                                    current.data.toMutableList()
-                                        .apply { set(event.index, newGoodUI) },
-                                )
-                            }
-
-                            is GoodsUI.Style -> {
-                                val newStyleUIList = goodsUI.styleUi.toMutableList()
-                                    .apply { addAll(goodsUI.extraList[0]) }
-                                val newExtraList = goodsUI.extraList.drop(0)
-                                val newStyleUI = goodsUI.copy(
-                                    styleUi = newStyleUIList,
-                                    extraList = newExtraList,
-                                )
-
-                                current.copy(
-                                    current.data.toMutableList()
-                                        .apply { set(event.index, newStyleUI) },
-                                )
-                            }
-
-                            else -> current
-                        }
-                    }
-
+                    is MainUiState.Success -> updateList(current, event.index)
                     else -> current
                 }
             }
 
-            is MainEvent.Recommand -> current
+            is MainEvent.Recommend -> {
+                when (current) {
+                    is MainUiState.Success -> shuffleList(current, event.index)
+                    else -> current
+                }
+            }
+
+            is MainEvent.Error -> TODO()
         }
     }
 
-    fun fetchUser() = viewModelScope.launch {
-        val users = mainRepository.getGoodsList()
-        events.send(MainEvent.Loaded(users = users))
-        _sideEffects.send("${users.size} user(s) loaded")
+    private fun fetchGoods() = viewModelScope.launch {
+        mainRepository.getGoodsList().asResult().collect {
+            when (it) {
+                is Result.Success -> events.send(MainEvent.Loaded(data = it.data.toUiModel()))
+                is Result.Error -> events.send(MainEvent.Error(error = it.exception))
+                Result.Loading -> events.send(MainEvent.Loading)
+            }
+        }
+    }
+
+    fun loadMore(index: Int) = viewModelScope.launch {
+        events.send(MainEvent.LoadMore(index))
+    }
+
+    fun recommendNewItem(index: Int) = viewModelScope.launch {
+        events.send(MainEvent.Recommend(index))
+    }
+
+    private fun updateList(current: MainUiState.Success, index: Int): MainUiState.Success {
+        val goodsUI = current.data[index]
+        val updatedGoodsUI = when (goodsUI) {
+            is GoodsUI.Grid -> goodsUI.updateGridItems()
+            is GoodsUI.Style -> goodsUI.updateStyleItems()
+            is GoodsUI.Scroll -> goodsUI
+            is GoodsUI.Banner -> goodsUI
+        }
+        return current.copy(
+            data = current.data.toMutableList().apply { set(index, updatedGoodsUI) },
+        )
+    }
+
+    private fun GoodsUI.Grid.updateGridItems(): GoodsUI.Grid {
+        val newGoodsUIList = goodUi.toMutableList().apply { addAll(extraList[0]) }
+        return copy(
+            goodUi = newGoodsUIList,
+            extraList = extraList.drop(1),
+        )
+    }
+
+    private fun GoodsUI.Style.updateStyleItems(): GoodsUI.Style {
+        val newStyleUIList = styleUi.toMutableList().apply { addAll(extraList[0]) }
+        return copy(
+            styleUi = newStyleUIList,
+            extraList = extraList.drop(1),
+        )
+    }
+
+    private fun shuffleList(current: MainUiState.Success, index: Int): MainUiState.Success {
+        val shuffledGoodsUI = when (val goodsUI = current.data[index]) {
+            is GoodsUI.Scroll -> goodsUI.shuffleItems()
+            else -> goodsUI
+        }
+
+        return current.copy(
+            data = current.data.toMutableList().apply { set(index, shuffledGoodsUI) },
+        )
+    }
+
+    private fun GoodsUI.Scroll.shuffleItems(): GoodsUI.Scroll {
+        return copy(goodUi = goodUi.shuffled())
     }
 }
 
@@ -111,7 +143,9 @@ sealed interface MainUiState {
 
 sealed interface MainEvent {
     object Loading : MainEvent
+    class Error(val error: Throwable?) : MainEvent
+
     class LoadMore(val index: Int) : MainEvent
-    class Recommand(val index: Int) : MainEvent
+    class Recommend(val index: Int) : MainEvent
     class Loaded(val data: List<GoodsUI>) : MainEvent
 }

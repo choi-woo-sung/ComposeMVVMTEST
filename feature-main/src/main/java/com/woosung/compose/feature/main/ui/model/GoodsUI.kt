@@ -21,7 +21,7 @@ sealed interface GoodsUI {
     }
 
     class Banner(val bannerUi: List<BannerUi>) : GoodsUI
-    class Scroll(val header: HeaderUi, val goodUi: List<GoodUi>, val footerUi: FooterUi) : GoodsUI
+    data class Scroll(val header: HeaderUi, val goodUi: List<GoodUi>, val footerUi: FooterUi) : GoodsUI
     data class Grid(
         val header: HeaderUi,
         val goodUi: List<GoodUi>,
@@ -111,12 +111,12 @@ fun List<Goods>.toUiModel() = this.map { goods ->
 
         ContentType.GRID -> {
             val item =
-                goods.contents.goods!!.map { it.toUiModel() }.chunkItems(5, 3)
+                goods.contents.goods!!.map { it.toUiModel() }.chunkItems(6, 3)
             GoodsUI.Grid(
                 header = goods.header!!.toUiModel(),
                 goodUi = item[0],
                 footerUi = goods.footer!!.toUiModel(),
-                extraList = item.drop(0),
+                extraList = item.drop(1),
             )
         }
 
@@ -127,12 +127,12 @@ fun List<Goods>.toUiModel() = this.map { goods ->
         )
 
         ContentType.STYLE -> {
-            val item = goods.contents.styles!!.map { it.toUiModel() }.chunked(3)
+            val item = goods.contents.styles!!.map { it.toUiModel() }.chunkItems(6, 3)
             GoodsUI.Style(
                 header = goods.header!!.toUiModel(),
                 styleUi = item[0],
                 footerUi = goods.footer!!.toUiModel(),
-                extraList = item.drop(0),
+                extraList = item.drop(1),
             )
         }
     }
