@@ -27,6 +27,8 @@ junit5 = "5.8.2"
 androidxArchCore = "2.2.0"
 pluginjunit5 = "1.8.2.1"
 coil = "2.3.0"
+appcompat = "1.6.1"
+material = "1.8.0"
 
 [libraries]
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidxCore" }
@@ -76,6 +78,8 @@ androidx-arch-core = { module = "androidx.arch.core:core-testing", version.ref =
 
 #coil
 compose-coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
+appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 
 [plugins]

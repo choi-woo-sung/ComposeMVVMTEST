@@ -59,6 +59,7 @@ dependencies {
     implementation(project(":core-domain"))
     implementation(project(":core-ui"))
     implementation(project(":designsystem"))
+    implementation(project(":core-common"))
     androidTestImplementation(project(":core-testing"))
 
     // Core Android dependencies
