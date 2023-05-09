@@ -19,6 +19,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.junit5)
 }
 
 android {
@@ -60,7 +61,7 @@ dependencies {
     implementation(project(":core-ui"))
     implementation(project(":designsystem"))
     implementation(project(":core-common"))
-    androidTestImplementation(project(":core-testing"))
+    testImplementation(project(":core-testing"))
 
     // Core Android dependencies
     implementation(libs.androidx.activity.compose)
@@ -100,4 +101,10 @@ dependencies {
     androidTestImplementation(libs.androidx.test.runner)
 
     implementation(libs.compose.coil)
+
+    testImplementation(libs.junit)
+    testImplementation(libs.junit.jupiter.api)
+    testRuntimeOnly(libs.junit.jupiter.engine)
+    testRuntimeOnly(libs.junit.vintage.engine)
+    testImplementation(libs.turbin)
 }

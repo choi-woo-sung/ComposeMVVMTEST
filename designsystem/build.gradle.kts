@@ -55,7 +55,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling)
     implementation(libs.compose.coil)
 
-    testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.androidx.test.runner)
+
 }

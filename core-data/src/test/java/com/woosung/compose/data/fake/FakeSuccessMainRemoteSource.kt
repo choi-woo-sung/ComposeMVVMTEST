@@ -9,7 +9,7 @@ import com.woosung.compose.network.remote.MainRemoteSource
 
 class FakeSuccessMainRemoteSource : MainRemoteSource {
     override suspend fun getGoods(): List<GetGoodsResponse> {
-        val list = listOf<GetGoodsResponse>(
+        val fakeList = listOf<GetGoodsResponse>(
             GetGoodsResponse(
                 contents = ContentsResponse(
                     type = "BANNER",
@@ -31,6 +31,6 @@ class FakeSuccessMainRemoteSource : MainRemoteSource {
                 ),
             ),
         )
-        return list
+        return fakeList
     }
 }

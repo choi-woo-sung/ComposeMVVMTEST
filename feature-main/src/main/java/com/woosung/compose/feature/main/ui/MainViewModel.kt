@@ -72,7 +72,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private fun fetchGoods() = viewModelScope.launch {
+    fun fetchGoods() = viewModelScope.launch {
         mainRepository.getGoodsList().asResult().collect {
             when (it) {
                 is Result.Success -> events.send(MainEvent.Loaded(data = it.data.toUiModel()))

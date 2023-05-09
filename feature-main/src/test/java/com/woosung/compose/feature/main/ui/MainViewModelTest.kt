@@ -14,48 +14,110 @@
  * limitations under the License.
  */
 
-package com.woosung.compose.feature.main.ui.main
+package com.woosung.compose.feature.main.ui
 
-
+import app.cash.turbine.test
+import com.woosung.compose.core.testing.CoroutinesTestExtension
+import com.woosung.compose.feature.main.ui.model.GoodsUI
+import com.woosung.compose.feature.main.ui.model.toUiModel
+import com.woosung.domain.model.Content
+import com.woosung.domain.model.ContentType
+import com.woosung.domain.model.Footer
+import com.woosung.domain.model.Good
+import com.woosung.domain.model.Goods
+import com.woosung.domain.model.Header
+import com.woosung.domain.model.Style
+import com.woosung.domain.repository.MainRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
 import org.junit.Test
-import com.woosung.compose.core.data.MainRepository
-import com.woosung.compose.feature.main.ui.MainUiState
-import com.woosung.compose.feature.main.ui.MainViewModel
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.extension.ExtendWith
 
 /**
  * Example local unit test, which will execute on the development machine (host).
  *
  * See [testing documentation](http://d.android.com/tools/testing).
  */
-@OptIn(ExperimentalCoroutinesApi::class) // TODO: Remove when stable
+@ExtendWith(CoroutinesTestExtension::class)
 class MainViewModelTest {
-    @Test
-    fun uiState_initiallyLoading() = runTest {
-        val viewModel = MainViewModel(FakeMainRepository())
-        assertEquals(viewModel.uiState.first(), MainUiState.Loading)
-    }
 
-    @Test
-    fun uiState_onItemSaved_isDisplayed() = runTest {
-        val viewModel = MainViewModel(FakeMainRepository())
-        assertEquals(viewModel.uiState.first(), MainUiState.Loading)
+    private lateinit var mainViewModel: MainViewModel
+    val fakeRepository = FakeMainRepository()
+
+    @Nested
+    @DisplayName("상품 리스트를 정상적으로 호출되었을때")
+    inner class MainSuccess {
+        @BeforeEach
+        fun initService() {
+            mainViewModel = MainViewModel(fakeRepository)
+        }
+
+        @OptIn(ExperimentalCoroutinesApi::class)
+        @org.junit.jupiter.api.Test
+        @DisplayName("상품 값을 정상적으로 가져온다.")
+        fun verifyGetGoodsList() = runTest {
+            Assertions.assertEquals(mainViewModel.uiState.value, MainUiState.Loading)
+            mainViewModel.fetchGoods()
+            mainViewModel.uiState.test {
+                val item = this.awaitItem()
+                Assertions.assertTrue(item is MainUiState.Success)
+                Assertions.assertEquals(item, MainUiState.Success(fakeGoodsList.toUiModel()))
+
+                if (item is MainUiState.Success) {
+                    Assertions.assertTrue(item.data[0] is GoodsUI.Style)
+                    Assertions.assertTrue(item.data[1] is GoodsUI.Grid)
+                }
+            }
+        }
     }
 }
 
-private class FakeMainRepository : MainRepository {
+val fakeGoodsList = listOf<Goods>(
+    Goods(
+        contents = Content(
+            type = ContentType.STYLE,
+            banners = listOf(),
+            goods = listOf(),
+            styles = listOf(
+                Style(
+                    "테스트 URL",
+                    thumbnailURL = "썸네일 URL",
+                ),
+            ),
+        ),
+        header = Header("테스트"),
+        footer = Footer("test", "test"),
+    ),
 
-    private val data = mutableListOf<String>()
+    Goods(
+        contents = Content(
+            type = ContentType.GRID,
+            banners = listOf(),
+            goods = listOf(
+                Good(
+                    linkURL = "테스트",
+                    thumbnailURL = "테스트",
+                    brandName = "호호",
+                    price = 1000,
+                    saleRate = 30,
+                    hasCoupon = false,
+                ),
+            ),
+            styles = listOf(),
+        ),
+        header = Header("테스트"),
+        footer = Footer("test", "test"),
+    ),
+)
 
-    override val mains: Flow<List<String>>
-        get() = flow { emit(data.toList()) }
-
-    override suspend fun add(name: String) {
-        data.add(0, name)
+class FakeMainRepository : MainRepository {
+    override fun getGoodsList(): Flow<List<Goods>> = flow {
+        emit(fakeGoodsList)
     }
 }
