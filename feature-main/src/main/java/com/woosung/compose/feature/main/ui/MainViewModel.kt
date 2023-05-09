@@ -18,39 +18,100 @@ package com.woosung.compose.feature.main.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ddd.pollpoll.core.result.Result
-import com.ddd.pollpoll.core.result.asResult
 import com.woosung.compose.feature.main.ui.MainUiState.Loading
-import com.woosung.domain.model.Goods
+import com.woosung.compose.feature.main.ui.model.GoodsUI
 import com.woosung.domain.repository.MainRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.runningFold
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val mainRepository: MainRepository,
 ) : ViewModel() {
+    private val events = Channel<MainEvent>()
 
-    val uiState = mainRepository.getGoodsList().asResult().map {
-        when (it) {
-            is Result.Success -> MainUiState.Success(it.data)
+    val uiState = events.receiveAsFlow().runningFold(MainUiState.Loading, ::reduceState)
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), Loading)
 
-            is Result.Error -> MainUiState.Error(it.exception ?: Exception("알수없는 에러"))
+    private fun reduceState(current: MainUiState, event: MainEvent): MainUiState {
+        return when (event) {
+            MainEvent.Loading -> {
+                Loading
+            }
 
-            Result.Loading -> Loading
+            is MainEvent.Loaded -> {
+                MainUiState.Success(event.data)
+            }
+
+            is MainEvent.LoadMore -> {
+                when (current) {
+                    is MainUiState.Success -> {
+                        val goodsUI = current.data[event.index]
+                        when (goodsUI) {
+                            is GoodsUI.Grid -> {
+                                val newGoodsUIList = goodsUI.goodUi.toMutableList()
+                                    .apply { addAll(goodsUI.extraList[0]) }
+                                val newExtraList = goodsUI.extraList.drop(0)
+                                val newGoodUI = goodsUI.copy(
+                                    goodUi = newGoodsUIList,
+                                    extraList = newExtraList,
+                                )
+
+                                current.copy(
+                                    current.data.toMutableList()
+                                        .apply { set(event.index, newGoodUI) },
+                                )
+                            }
+
+                            is GoodsUI.Style -> {
+                                val newStyleUIList = goodsUI.styleUi.toMutableList()
+                                    .apply { addAll(goodsUI.extraList[0]) }
+                                val newExtraList = goodsUI.extraList.drop(0)
+                                val newStyleUI = goodsUI.copy(
+                                    styleUi = newStyleUIList,
+                                    extraList = newExtraList,
+                                )
+
+                                current.copy(
+                                    current.data.toMutableList()
+                                        .apply { set(event.index, newStyleUI) },
+                                )
+                            }
+
+                            else -> current
+                        }
+                    }
+
+                    else -> current
+                }
+            }
+
+            is MainEvent.Recommand -> current
         }
-    }.stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(5000L),
-        Loading,
-    )
+    }
+
+    fun fetchUser() = viewModelScope.launch {
+        val users = mainRepository.getGoodsList()
+        events.send(MainEvent.Loaded(users = users))
+        _sideEffects.send("${users.size} user(s) loaded")
+    }
 }
 
 sealed interface MainUiState {
     object Loading : MainUiState
-    data class Success(val data: List<Goods>) : MainUiState
+    data class Success(val data: List<GoodsUI>) : MainUiState
     data class Error(val throwable: Throwable) : MainUiState
+}
+
+sealed interface MainEvent {
+    object Loading : MainEvent
+    class LoadMore(val index: Int) : MainEvent
+    class Recommand(val index: Int) : MainEvent
+    class Loaded(val data: List<GoodsUI>) : MainEvent
 }

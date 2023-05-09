@@ -16,12 +16,18 @@
 
 package com.woosung.compose.feature.main.ui
 
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeightIn
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
@@ -29,27 +35,38 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
+import coil.compose.rememberAsyncImagePainter
 import com.woosung.compose.core.ui.MyApplicationTheme
 import com.woosung.compose.designsystem.button.FooterButton
 import com.woosung.compose.designsystem.grid.GoodGridContent
 import com.woosung.compose.designsystem.grid.gridItems
 import com.woosung.compose.designsystem.grid.styleGridItems
 import com.woosung.compose.designsystem.topbar.GoodsHeader
-import com.woosung.domain.model.Banner
-import com.woosung.domain.model.ContentType
-import com.woosung.domain.model.Footer
-import com.woosung.domain.model.Good
-import com.woosung.domain.model.Header
+import com.woosung.compose.feature.main.ui.model.BannerUi
+import com.woosung.compose.feature.main.ui.model.FooterUi
+import com.woosung.compose.feature.main.ui.model.GoodUi
+import com.woosung.compose.feature.main.ui.model.GoodsUI
+import com.woosung.compose.feature.main.ui.model.HeaderUi
+import com.woosung.compose.feature.main.ui.model.StyleUi
+import kotlinx.coroutines.delay
 
 @Composable
 fun MainScreen(modifier: Modifier = Modifier, viewModel: MainViewModel = hiltViewModel()) {
@@ -63,36 +80,54 @@ internal fun MainScreen(
     uiState: MainUiState,
 ) {
     val horizontalListScroll = rememberLazyListState()
+    LazyColumn() {
+        when (uiState) {
+            is MainUiState.Error -> {}
+            MainUiState.Loading -> {
+                item {
+                    Box(modifier = Modifier.fillParentMaxSize()) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.align(Alignment.Center),
+                        )
+                    }
+                }
+            }
 
-    when (uiState) {
-        is MainUiState.Error -> {}
-        MainUiState.Loading -> {}
-        is MainUiState.Success -> {
-            LazyColumn() {
-                val grid = uiState.data.filter { it.contents.type == ContentType.GRID }.first()
-                val scroll = uiState.data.filter { it.contents.type == ContentType.SCROLL }.first()
-                val banner = uiState.data.filter { it.contents.type == ContentType.BANNER }.first()
-                BannerScreen(
-                    header = banner.header,
-                    content = banner.contents.banners,
-                    footer = banner.footer,
-                )
-                GoodsGridScreen(
-                    header = grid.header,
-                    content = grid.contents.goods,
-                    footer = grid.footer,
-                )
-                ScrollScreen(
-                    header = scroll.header,
-                    content = scroll.contents.goods,
-                    footer = scroll.footer,
-                    horizontalListScroll,
-                )
-                StyleScreen(
-                    header = grid.header,
-                    content = grid.contents.goods,
-                    footer = grid.footer,
-                )
+            is MainUiState.Success -> {
+                uiState.data.forEach {
+                    when (it) {
+                        is GoodsUI.Banner -> {
+                            BannerScreen(
+                                content = it.bannerUi,
+                            )
+                        }
+
+                        is GoodsUI.Grid -> {
+                            GoodsGridScreen(
+                                header = it.header,
+                                content = it.goodUi,
+                                footer = it.footerUi,
+                            )
+                        }
+
+                        is GoodsUI.Scroll -> {
+                            ScrollScreen(
+                                header = it.header,
+                                content = it.goodUi,
+                                footer = it.footerUi,
+                                horizontalListScroll,
+                            )
+                        }
+
+                        is GoodsUI.Style -> {
+                            StyleScreen(
+                                header = it.header,
+                                content = it.styleUi,
+                                footer = it.footerUi,
+                            )
+                        }
+                    }
+                }
             }
         }
     }
@@ -100,162 +135,190 @@ internal fun MainScreen(
 
 @OptIn(ExperimentalFoundationApi::class)
 fun LazyListScope.BannerScreen(
-    header: Header?,
-    content: List<Banner>?,
-    footer: Footer?,
+    content: List<BannerUi>,
 ) {
-    if (header != null) {
-        stickyHeader {
-            GoodsHeader(
-                title = header.title,
-                iconUrl = header.iconURL,
-                linkUrl = header.linkURL,
-            )
-        }
-    }
-    if (content != null) {
-        item {
-            GoodParallaxHorizontalPager(banner = content)
-        }
-    }
-    if (footer != null) {
-        item {
-            FooterButton(
-                text = footer.title,
-                iconUrl = footer.iconURL,
-            )
-        }
+    item {
+        GoodParallaxHorizontalPager(banner = content)
     }
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 fun LazyListScope.ScrollScreen(
-    header: Header?,
-    content: List<Good>?,
-    footer: Footer?,
+    header: HeaderUi,
+    content: List<GoodUi>,
+    footer: FooterUi,
     horizontalListScroll: LazyListState,
 ) {
-    if (header != null) {
-        stickyHeader {
-            GoodsHeader(
-                title = header.title,
-                iconUrl = header.iconURL,
-                linkUrl = header.linkURL,
-            )
-        }
+    stickyHeader {
+        GoodsHeader(
+            title = header.title,
+            iconUrl = header.iconURL,
+            linkUrl = header.linkURL,
+        )
     }
-    if (content != null) {
-        item {
-            LazyRow(state = horizontalListScroll) {
-                items(content) {
-                    GoodGridContent(
-                        title = it.brandName,
-                        thumbnailURL = it.thumbnailURL,
-                        price = it.price.toString(),
-                        disCountPercent = it.saleRate.toString(),
-                        hasCoupon = it.hasCoupon,
-                    )
-                }
+    item {
+        LazyRow(state = horizontalListScroll) {
+            items(content) {
+                GoodGridContent(
+                    modifier = Modifier.width(150.dp),
+                    title = it.brandName,
+                    thumbnailURL = it.thumbnailURL,
+                    price = it.price,
+                    disCountPercent = it.saleRate.toString(),
+                    hasCoupon = it.hasCoupon,
+                )
             }
         }
     }
-    if (footer != null) {
-        item {
-            FooterButton(
-                text = footer.title,
-                iconUrl = footer.iconURL,
-            )
-        }
+    item {
+        FooterButton(
+            text = footer.title,
+            iconUrl = footer.iconURL,
+        )
     }
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 fun LazyListScope.StyleScreen(
-    header: Header?,
-    content: List<Good>?,
-    footer: Footer?,
+    header: HeaderUi,
+    content: List<StyleUi>,
+    footer: FooterUi,
 ) {
-    if (header != null) {
-        stickyHeader {
-            GoodsHeader(
-                title = header.title,
-                iconUrl = header.iconURL,
-                linkUrl = header.linkURL,
-            )
-        }
+    stickyHeader {
+        GoodsHeader(
+            title = header.title,
+            iconUrl = header.iconURL,
+            linkUrl = header.linkURL,
+        )
     }
-    if (content != null) {
-        styleGridItems(content, 3) {
-            AsyncImage(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(1.dp),
-                model = it.thumbnailURL,
-                contentScale = ContentScale.Crop,
-                contentDescription = "",
-            )
-        }
-    }
-    if (footer != null) {
-        item {
-            FooterButton(
-                text = footer.title,
-                iconUrl = footer.iconURL,
-            )
-        }
-    }
-}
-
-@OptIn(ExperimentalFoundationApi::class)
-fun LazyListScope.GoodsGridScreen(header: Header?, content: List<Good>?, footer: Footer?) {
-    if (header != null) {
-        stickyHeader {
-            GoodsHeader(
-                title = header.title,
-                iconUrl = header.iconURL,
-                linkUrl = header.linkURL,
-            )
-        }
-    }
-    if (content != null) {
-        gridItems(content, 3) {
-            GoodGridContent(
-                title = it.brandName,
-                thumbnailURL = it.thumbnailURL,
-                price = it.price.toString(),
-                disCountPercent = it.saleRate.toString(),
-                hasCoupon = it.hasCoupon,
-            )
-        }
-    }
-    if (footer != null) {
-        item {
-            FooterButton(
-                text = footer.title,
-                iconUrl = footer.iconURL,
-            )
-        }
-    }
-}
-
-@OptIn(ExperimentalFoundationApi::class)
-@Composable
-fun GoodParallaxHorizontalPager(banner: List<Banner>) {
-    val state = rememberPagerState(0)
-    HorizontalPager(pageCount = banner.size, state = state) { page ->
+    styleGridItems(content, 3) {
         AsyncImage(
-            model = banner[page].thumbnailURL,
-            contentDescription = "",
+            modifier = Modifier
+                .padding(1.dp)
+                .fillMaxSize(),
+            model = it.thumbnailURL,
             contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxWidth().requiredHeightIn(300.dp),
+            contentDescription = "",
+        )
+    }
+    item {
+        FooterButton(
+            text = footer.title,
+            iconUrl = footer.iconURL,
         )
     }
 }
 
-@Preview(showBackground = true, widthDp = 480)
+@OptIn(ExperimentalFoundationApi::class)
+fun LazyListScope.GoodsGridScreen(header: HeaderUi, content: List<GoodUi>, footer: FooterUi) {
+    stickyHeader {
+        GoodsHeader(
+            title = header.title,
+            iconUrl = header.iconURL,
+            linkUrl = header.linkURL,
+        )
+    }
+    gridItems(content, 3) {
+        GoodGridContent(
+            modifier = Modifier.fillMaxSize(),
+            title = it.brandName,
+            thumbnailURL = it.thumbnailURL,
+            price = it.price,
+            disCountPercent = it.saleRate.toString(),
+            hasCoupon = it.hasCoupon,
+        )
+    }
+    item {
+        FooterButton(
+            text = footer.title,
+            iconUrl = footer.iconURL,
+        )
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun PortraitPreview() {
+fun GoodParallaxHorizontalPager(banner: List<BannerUi>) {
+    val pagerState = rememberPagerState(0)
+    LaunchedEffect(true) {
+        while (pagerState.currentPage != banner.size - 1) {
+            delay(3000)
+            pagerState.animateScrollToPage(
+                page = pagerState.settledPage + 1,
+                animationSpec = tween(
+                    durationMillis = 1000,
+                ),
+            )
+        }
+    }
+    Box() {
+        HorizontalPager(
+            pageCount = banner.size,
+            state = pagerState,
+            beyondBoundsPageCount = 0,
+        ) { page ->
+            val bannerResult = banner[page]
+            val pageOffset = pagerState.calculateCurrentOffsetForPage(page)
+            Box() {
+                val image = rememberAsyncImagePainter(model = bannerResult.thumbnailURL)
+                Image(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .requiredHeightIn(300.dp)
+                        .graphicsLayer {
+                            // todo pager에서는 Z Index를 제공하지 않기 떄문에 현재론 이방법으로 뒤로가기 적용불가
+                            // alpha값을 줘서 자연스럽게 보이게 만듬.
+                            translationX =
+                                if (pagerState.settledPage == page) pageOffset * (size.width) else 0f
+//                            alpha = if (pagerState.settledPage == page) 1 - pageOffset.absoluteValue else 1f
+                        },
+                    painter = image,
+                    contentDescription = "",
+                    contentScale = ContentScale.Crop,
+                )
+                Column(
+                    Modifier.align(Alignment.Center),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Text(
+                        modifier = Modifier
+                            .graphicsLayer {
+                                translationX = pageOffset * (size.width * -2)
+                            },
+                        text = bannerResult.title,
+                    )
+                    Spacer(modifier = Modifier.height(50.dp))
+
+                    Text(
+                        modifier = Modifier
+                            .graphicsLayer {
+                                translationX = pageOffset / 3f * (size.width * -2)
+                            },
+                        text = bannerResult.description,
+                    )
+                }
+            }
+        }
+
+        Surface(Modifier.align(Alignment.BottomEnd), color = Color.Black.copy(alpha = 0.5f)) {
+            Text(
+                modifier = Modifier.padding(10.dp),
+                text = "${pagerState.currentPage + 1}/${banner.size}",
+            )
+        }
+    }
+}
+
+// extension method for current page offset
+@OptIn(ExperimentalFoundationApi::class)
+fun PagerState.calculateCurrentOffsetForPage(page: Int): Float {
+    return (currentPage - page) + currentPageOffsetFraction
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun MainScreenLoadingPreview() {
     MyApplicationTheme {
-        MainScreen()
+        MainScreen(uiState = MainUiState.Loading)
     }
 }

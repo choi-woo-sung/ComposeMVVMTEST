@@ -1,5 +1,6 @@
 package com.woosung.compose.feature.main.ui.model
 
+import com.woosung.compose.common.ext.addCommasToThousands
 import com.woosung.domain.model.Banner
 import com.woosung.domain.model.ContentType
 import com.woosung.domain.model.Footer
@@ -7,12 +8,28 @@ import com.woosung.domain.model.Good
 import com.woosung.domain.model.Goods
 import com.woosung.domain.model.Header
 import com.woosung.domain.model.Style
+import java.lang.Integer.min
 
 sealed interface GoodsUI {
-    class Style(val header: HeaderUi, val styleUi: List<StyleUi>, val footerUi: FooterUi) : GoodsUI
+    data class Style(
+        val header: HeaderUi,
+        val styleUi: List<StyleUi>,
+        val footerUi: FooterUi,
+        val extraList: List<List<StyleUi>> = listOf(),
+    ) : GoodsUI {
+        val isMore: Boolean = extraList.isNotEmpty()
+    }
+
     class Banner(val bannerUi: List<BannerUi>) : GoodsUI
     class Scroll(val header: HeaderUi, val goodUi: List<GoodUi>, val footerUi: FooterUi) : GoodsUI
-    class Grid(val header: HeaderUi, val goodUi: List<GoodUi>, val footerUi: FooterUi) : GoodsUI
+    data class Grid(
+        val header: HeaderUi,
+        val goodUi: List<GoodUi>,
+        val footerUi: FooterUi,
+        val extraList: List<List<GoodUi>> = listOf(),
+    ) : GoodsUI {
+        val isMore: Boolean = extraList.isNotEmpty()
+    }
 }
 
 data class HeaderUi(
@@ -33,7 +50,7 @@ data class GoodUi(
     val linkURL: String,
     val thumbnailURL: String,
     val brandName: String,
-    val price: Long,
+    val price: String,
     val saleRate: Long,
     val hasCoupon: Boolean,
 )
@@ -59,7 +76,7 @@ fun Good.toUiModel() = GoodUi(
     linkURL = linkURL,
     thumbnailURL = thumbnailURL,
     brandName = brandName,
-    price = price,
+    price = price.addCommasToThousands(),
     saleRate = saleRate,
     hasCoupon = hasCoupon,
 
@@ -86,20 +103,62 @@ fun Banner.toUiModel() = BannerUi(
 
 )
 
-fun List<Goods>.toUiModel() {
-    this.map { goods ->
-        when (goods.contents.type) {
-            ContentType.BANNER -> GoodsUI.Banner(
-                goods.contents.banners?.map { it.toUiModel() }!!,
-            )
+fun List<Goods>.toUiModel() = this.map { goods ->
+    when (goods.contents.type) {
+        ContentType.BANNER -> GoodsUI.Banner(
+            goods.contents.banners?.map { it.toUiModel() }!!,
+        )
 
-            ContentType.GRID -> GoodsUI.Grid(
-                header = goods.header.toUiModel(),
-                goodUi = goods.contents.goods,
+        ContentType.GRID -> {
+            val item =
+                goods.contents.goods!!.map { it.toUiModel() }.chunkItems(5, 3)
+            GoodsUI.Grid(
+                header = goods.header!!.toUiModel(),
+                goodUi = item[0],
+                footerUi = goods.footer!!.toUiModel(),
+                extraList = item.drop(0),
             )
+        }
 
-            ContentType.SCROLL -> TODO()
-            ContentType.STYLE -> TODO()
+        ContentType.SCROLL -> GoodsUI.Scroll(
+            header = goods.header!!.toUiModel(),
+            goodUi = goods.contents.goods!!.map { it.toUiModel() },
+            footerUi = goods.footer!!.toUiModel(),
+        )
+
+        ContentType.STYLE -> {
+            val item = goods.contents.styles!!.map { it.toUiModel() }.chunked(3)
+            GoodsUI.Style(
+                header = goods.header!!.toUiModel(),
+                styleUi = item[0],
+                footerUi = goods.footer!!.toUiModel(),
+                extraList = item.drop(0),
+            )
         }
     }
+}
+
+/**
+ * 요구사항에 맞추기위해 청크를 하는 함수
+ *
+ * @param items
+ * @param firstChunkSize
+ * @param otherChunkSize
+ * @return
+ */
+fun <T> List<T>.chunkItems(firstChunkSize: Int, otherChunkSize: Int): List<List<T>> {
+    val result = mutableListOf<List<T>>()
+    var index = 0
+
+    if (this.isNotEmpty()) {
+        result.add(this.subList(index, min(index + firstChunkSize, this.size)))
+        index += firstChunkSize
+
+        while (index < this.size) {
+            result.add(this.subList(index, min(index + otherChunkSize, this.size)))
+            index += otherChunkSize
+        }
+    }
+
+    return result
 }

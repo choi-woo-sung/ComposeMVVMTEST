@@ -7,9 +7,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 
 fun LazyListScope.gridItems(
     count: Int,
@@ -94,7 +96,7 @@ fun <T> LazyListScope.styleGridItems(
                         val item = data[itemIndex]
                         androidx.compose.runtime.key(key?.invoke(item)) {
                             Box(
-                                modifier = Modifier.weight(1f, fill = true),
+                                modifier = Modifier.weight(1f, fill = true).height(170.dp),
                                 propagateMinConstraints = true,
                             ) {
                                 itemContent.invoke(this, item)
