@@ -1,4 +1,4 @@
-package com.woosung.compose.designsystem.topbar
+package com.woosung.compose.designsystem.header
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer

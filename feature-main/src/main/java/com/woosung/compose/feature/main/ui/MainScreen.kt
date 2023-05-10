@@ -59,7 +59,7 @@ import com.woosung.compose.designsystem.button.FooterButton
 import com.woosung.compose.designsystem.grid.GoodGridContent
 import com.woosung.compose.designsystem.grid.gridItems
 import com.woosung.compose.designsystem.grid.styleGridItems
-import com.woosung.compose.designsystem.topbar.GoodsHeader
+import com.woosung.compose.designsystem.header.GoodsHeader
 import com.woosung.compose.feature.main.ui.model.BannerUi
 import com.woosung.compose.feature.main.ui.model.FooterUi
 import com.woosung.compose.feature.main.ui.model.GoodUi
