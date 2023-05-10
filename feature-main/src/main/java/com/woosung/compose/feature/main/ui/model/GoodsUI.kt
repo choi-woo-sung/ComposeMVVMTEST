@@ -1,5 +1,6 @@
 package com.woosung.compose.feature.main.ui.model
 
+import androidx.compose.runtime.Stable
 import com.woosung.compose.common.ext.addCommasToThousands
 import com.woosung.domain.model.Banner
 import com.woosung.domain.model.ContentType
@@ -8,25 +9,35 @@ import com.woosung.domain.model.Good
 import com.woosung.domain.model.Goods
 import com.woosung.domain.model.Header
 import com.woosung.domain.model.Style
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import java.lang.Integer.min
 
+
+@Stable
 sealed interface GoodsUI {
     data class Style(
         val header: HeaderUi,
-        val styleUi: List<StyleUi>,
+        val styleUi: ImmutableList<StyleUi>,
         val footerUi: FooterUi,
-        val extraList: List<List<StyleUi>> = listOf(),
+        val extraList: ImmutableList<ImmutableList<StyleUi>> = persistentListOf(),
     ) : GoodsUI {
         val isMore: Boolean = extraList.isNotEmpty()
     }
 
-    class Banner(val bannerUi: List<BannerUi>) : GoodsUI
-    data class Scroll(val header: HeaderUi, val goodUi: List<GoodUi>, val footerUi: FooterUi) : GoodsUI
+    class Banner(val bannerUi: ImmutableList<BannerUi>) : GoodsUI
+    data class Scroll(
+        val header: HeaderUi,
+        val goodUi: ImmutableList<GoodUi>,
+        val footerUi: FooterUi,
+    ) : GoodsUI
+
     data class Grid(
         val header: HeaderUi,
-        val goodUi: List<GoodUi>,
+        val goodUi: ImmutableList<GoodUi>,
         val footerUi: FooterUi,
-        val extraList: List<List<GoodUi>> = listOf(),
+        val extraList: ImmutableList<ImmutableList<GoodUi>> = persistentListOf(),
     ) : GoodsUI {
         val isMore: Boolean = extraList.isNotEmpty()
     }
@@ -106,23 +117,23 @@ fun Banner.toUiModel() = BannerUi(
 fun List<Goods>.toUiModel() = this.map { goods ->
     when (goods.contents.type) {
         ContentType.BANNER -> GoodsUI.Banner(
-            goods.contents.banners?.map { it.toUiModel() }!!,
+            goods.contents.banners?.map { it.toUiModel() }!!.toImmutableList(),
         )
 
         ContentType.GRID -> {
             val item =
-                goods.contents.goods!!.map { it.toUiModel() }.chunkItems(6, 3)
+                goods.contents.goods!!.map { it.toUiModel() }.chunkItems(6, 3).toImmutableList()
             GoodsUI.Grid(
                 header = goods.header!!.toUiModel(),
-                goodUi = item[0],
+                goodUi = item[0].toImmutableList(),
                 footerUi = goods.footer!!.toUiModel(),
-                extraList = item.drop(1),
+                extraList = item.drop(1).map { it.toImmutableList() }.toImmutableList(),
             )
         }
 
         ContentType.SCROLL -> GoodsUI.Scroll(
             header = goods.header!!.toUiModel(),
-            goodUi = goods.contents.goods!!.map { it.toUiModel() },
+            goodUi = goods.contents.goods!!.map { it.toUiModel() }.toImmutableList(),
             footerUi = goods.footer!!.toUiModel(),
         )
 
@@ -130,9 +141,9 @@ fun List<Goods>.toUiModel() = this.map { goods ->
             val item = goods.contents.styles!!.map { it.toUiModel() }.chunkItems(6, 3)
             GoodsUI.Style(
                 header = goods.header!!.toUiModel(),
-                styleUi = item[0],
+                styleUi = item[0].toImmutableList(),
                 footerUi = goods.footer!!.toUiModel(),
-                extraList = item.drop(1),
+                extraList = item.drop(1).map { it.toImmutableList() }.toImmutableList(),
             )
         }
     }

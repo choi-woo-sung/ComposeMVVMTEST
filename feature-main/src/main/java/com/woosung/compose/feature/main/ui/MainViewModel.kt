@@ -16,6 +16,7 @@
 
 package com.woosung.compose.feature.main.ui
 
+import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ddd.pollpoll.core.result.Result
@@ -25,6 +26,7 @@ import com.woosung.compose.feature.main.ui.model.GoodsUI
 import com.woosung.compose.feature.main.ui.model.toUiModel
 import com.woosung.domain.repository.MainRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -106,16 +108,16 @@ class MainViewModel @Inject constructor(
     private fun GoodsUI.Grid.updateGridItems(): GoodsUI.Grid {
         val newGoodsUIList = goodUi.toMutableList().apply { addAll(extraList[0]) }
         return copy(
-            goodUi = newGoodsUIList,
-            extraList = extraList.drop(1),
+            goodUi = newGoodsUIList.toImmutableList(),
+            extraList = extraList.drop(1).toImmutableList(),
         )
     }
 
     private fun GoodsUI.Style.updateStyleItems(): GoodsUI.Style {
         val newStyleUIList = styleUi.toMutableList().apply { addAll(extraList[0]) }
         return copy(
-            styleUi = newStyleUIList,
-            extraList = extraList.drop(1),
+            styleUi = newStyleUIList.toImmutableList(),
+            extraList = extraList.drop(1).toImmutableList(),
         )
     }
 
@@ -131,16 +133,18 @@ class MainViewModel @Inject constructor(
     }
 
     private fun GoodsUI.Scroll.shuffleItems(): GoodsUI.Scroll {
-        return copy(goodUi = goodUi.shuffled())
+        return copy(goodUi = goodUi.shuffled().toImmutableList())
     }
 }
 
+@Stable
 sealed interface MainUiState {
     object Loading : MainUiState
     data class Success(val data: List<GoodsUI>) : MainUiState
     data class Error(val throwable: Throwable) : MainUiState
 }
 
+@Stable
 sealed interface MainEvent {
     object Loading : MainEvent
     class Error(val error: Throwable?) : MainEvent

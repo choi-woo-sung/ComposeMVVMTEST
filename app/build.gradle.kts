@@ -21,9 +21,18 @@ plugins {
     alias(libs.plugins.hilt.gradle)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.compose.compiler.report)
 }
 
 android {
+    signingConfigs {
+        create("release") {
+            storeFile = file("/Users/wschoi01/Untitled1")
+            storePassword = "111111"
+            keyAlias = "111111"
+            keyPassword = "111111"
+        }
+    }
     namespace = "com.woosung.compose"
     compileSdk = 33
 

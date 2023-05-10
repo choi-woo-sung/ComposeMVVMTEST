@@ -20,6 +20,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.junit5)
+    alias(libs.plugins.compose.compiler.report)
 }
 
 android {
@@ -107,4 +108,6 @@ dependencies {
     testRuntimeOnly(libs.junit.jupiter.engine)
     testRuntimeOnly(libs.junit.vintage.engine)
     testImplementation(libs.turbin)
+
+    implementation(libs.kotlin.immutable)
 }

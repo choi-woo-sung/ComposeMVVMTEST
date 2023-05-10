@@ -66,6 +66,8 @@ import com.woosung.compose.feature.main.ui.model.GoodUi
 import com.woosung.compose.feature.main.ui.model.GoodsUI
 import com.woosung.compose.feature.main.ui.model.HeaderUi
 import com.woosung.compose.feature.main.ui.model.StyleUi
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
 
 @Composable
@@ -104,7 +106,7 @@ internal fun MainScreen(
                     when (goodUi) {
                         is GoodsUI.Banner -> {
                             BannerScreen(
-                                content = goodUi.bannerUi,
+                                content = goodUi.bannerUi.toImmutableList(),
                             )
                         }
 
@@ -147,7 +149,7 @@ internal fun MainScreen(
 
 @OptIn(ExperimentalFoundationApi::class)
 fun LazyListScope.BannerScreen(
-    content: List<BannerUi>,
+    content: ImmutableList<BannerUi>,
 ) {
     item {
         GoodParallaxHorizontalPager(banner = content)
@@ -266,7 +268,7 @@ fun LazyListScope.GoodsGridScreen(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun GoodParallaxHorizontalPager(banner: List<BannerUi>) {
+fun GoodParallaxHorizontalPager(banner: ImmutableList<BannerUi>) {
     val pagerState = rememberPagerState(0)
     LaunchedEffect(true) {
         while (pagerState.currentPage != banner.size - 1) {
