@@ -28,6 +28,8 @@ import com.woosung.domain.repository.MainRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.runningFold
@@ -39,13 +41,14 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val mainRepository: MainRepository,
 ) : ViewModel() {
-    private val events = Channel<MainEvent>()
+
+    private val events = MutableSharedFlow<MainEvent>()
 
     init {
         fetchGoods()
     }
 
-    val uiState = events.receiveAsFlow().runningFold(MainUiState.Loading, ::reduceState)
+    val uiState = events.runningFold(MainUiState.Loading, ::reduceState)
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), Loading)
 
     private fun reduceState(current: MainUiState, event: MainEvent): MainUiState {
@@ -77,19 +80,19 @@ class MainViewModel @Inject constructor(
     fun fetchGoods() = viewModelScope.launch {
         mainRepository.getGoodsList().asResult().collect {
             when (it) {
-                is Result.Success -> events.send(MainEvent.Loaded(data = it.data.toUiModel()))
-                is Result.Error -> events.send(MainEvent.Error(error = it.exception))
-                Result.Loading -> events.send(MainEvent.Loading)
+                is Result.Success -> events.emit(MainEvent.Loaded(data = it.data.toUiModel()))
+                is Result.Error -> events.emit(MainEvent.Error(error = it.exception))
+                Result.Loading -> events.emit(MainEvent.Loading)
             }
         }
     }
 
     fun loadMore(index: Int) = viewModelScope.launch {
-        events.send(MainEvent.LoadMore(index))
+        events.emit(MainEvent.LoadMore(index))
     }
 
     fun recommendNewItem(index: Int) = viewModelScope.launch {
-        events.send(MainEvent.Recommend(index))
+        events.emit(MainEvent.Recommend(index))
     }
 
     private fun updateList(current: MainUiState.Success, index: Int): MainUiState.Success {
